@@ -52,6 +52,24 @@ h1 {
   font-size: 18px;
 }
 
+.intro__goal {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #486366;
+  text-align: left;
+}
+
+.intro__goal h2 {
+  margin: 0 0 12px;
+  color: #e2b78b;
+  font-size: 22px;
+}
+
+.intro__goal p {
+  margin: 0;
+  color: #c3d1cf;
+}
+
 .intro__note {
   margin: 36px 0 0;
   color: #abc2bc;
