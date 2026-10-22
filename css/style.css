@@ -75,3 +75,30 @@ h1 {
   color: #abc2bc;
   font-size: 14px;
 }
+
+@media (max-width: 480px) {
+  body {
+    padding: 32px 16px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .intro__day {
+    margin-bottom: 24px;
+  }
+
+  .intro__vase {
+    margin-bottom: 24px;
+  }
+
+  .intro__goal {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+
+  .intro__note {
+    margin-top: 24px;
+  }
+}
