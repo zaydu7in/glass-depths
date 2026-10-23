@@ -70,6 +70,30 @@ h1 {
   color: #c3d1cf;
 }
 
+.intro__start {
+  max-width: 100%;
+  min-height: 48px;
+  margin-top: 24px;
+  padding: 12px 20px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background-color: #e2b78b;
+  color: #112126;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.intro__start:hover {
+  background-color: #efc9a4;
+}
+
+.intro__start:focus-visible,
+#expedition-title:focus {
+  outline: 3px solid #edf4ed;
+  outline-offset: 6px;
+}
+
 .intro__note {
   margin: 36px 0 0;
   color: #abc2bc;
