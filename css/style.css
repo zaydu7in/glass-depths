@@ -70,7 +70,7 @@ h1 {
   color: #c3d1cf;
 }
 
-.intro__start {
+.action-button {
   max-width: 100%;
   min-height: 48px;
   margin-top: 24px;
@@ -84,14 +84,24 @@ h1 {
   cursor: pointer;
 }
 
-.intro__start:hover {
+.action-button:hover {
   background-color: #efc9a4;
 }
 
-.intro__start:focus-visible,
+.action-button:focus-visible,
 #expedition-title:focus {
   outline: 3px solid #edf4ed;
   outline-offset: 6px;
+}
+
+.expedition__count {
+  margin: 24px 0 0;
+  color: #b9d9d1;
+  font-size: 20px;
+}
+
+.expedition__count span {
+  font-weight: 700;
 }
 
 .intro__note {
