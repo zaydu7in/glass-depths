@@ -10,7 +10,7 @@
   </head>
   <body>
     <main class="intro">
-      <p class="intro__day">День 5 из 70</p>
+      <p class="intro__day">День 6 из 70</p>
       <div id="intro-screen">
         <img class="intro__vase" src="assets/images/vase.svg" alt="" width="104" height="144">
         <p class="intro__eyebrow">Маленькая история о хрупких находках</p>
@@ -26,8 +26,9 @@
       <section id="expedition-screen" aria-labelledby="expedition-title" hidden>
         <h1 id="expedition-title" tabindex="-1">Экспедиция</h1>
         <p class="intro__description">Исследуйте заброшенную шахту и ищите стеклянные вазы.</p>
-        <p class="expedition__count" aria-live="polite" aria-atomic="true">Найдено ваз: <span id="vase-count">0</span></p>
+        <p class="expedition__count">Найдено ваз: <span id="vase-count">0</span></p>
         <button class="action-button" id="search-vase" type="button">Искать вазу</button>
+        <p class="expedition__feedback" id="search-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
       </section>
     </main>
   </body>

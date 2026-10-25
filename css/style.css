@@ -104,6 +104,11 @@ h1 {
   font-weight: 700;
 }
 
+.expedition__feedback {
+  margin: 24px 0 0;
+  color: #e2b78b;
+}
+
 .intro__note {
   margin: 36px 0 0;
   color: #abc2bc;
