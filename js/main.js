@@ -5,6 +5,7 @@ const expeditionScreen = document.getElementById("expedition-screen");
 const expeditionTitle = document.getElementById("expedition-title");
 const startButton = document.getElementById("start-expedition");
 const searchButton = document.getElementById("search-vase");
+const resetButton = document.getElementById("reset-expedition");
 const vaseCount = document.getElementById("vase-count");
 const searchFeedback = document.getElementById("search-feedback");
 
@@ -20,4 +21,10 @@ searchButton.addEventListener("click", () => {
   foundVases += 1;
   vaseCount.textContent = String(foundVases);
   searchFeedback.textContent = `Последняя находка: стеклянная ваза № ${foundVases}.`;
+});
+
+resetButton.addEventListener("click", () => {
+  foundVases = 0;
+  vaseCount.textContent = "0";
+  searchFeedback.textContent = "";
 });

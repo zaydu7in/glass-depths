@@ -88,6 +88,18 @@ h1 {
   background-color: #efc9a4;
 }
 
+.action-button--secondary {
+  display: block;
+  margin: 16px auto 0;
+  border-color: #486366;
+  background-color: transparent;
+  color: #edf4ed;
+}
+
+.action-button--secondary:hover {
+  background-color: #20373b;
+}
+
 .action-button:focus-visible,
 #expedition-title:focus {
   outline: 3px solid #edf4ed;
