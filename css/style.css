@@ -88,6 +88,11 @@ h1 {
   background-color: #efc9a4;
 }
 
+.action-button[aria-disabled="true"] {
+  background-color: #a5a699;
+  cursor: wait;
+}
+
 .action-button--secondary {
   display: block;
   margin: 16px auto 0;

@@ -10,6 +10,7 @@ const vaseCount = document.getElementById("vase-count");
 const searchFeedback = document.getElementById("search-feedback");
 
 let foundVases = 0;
+let searchTimer = null;
 
 startButton.addEventListener("click", () => {
   introScreen.hidden = true;
@@ -18,12 +19,24 @@ startButton.addEventListener("click", () => {
 });
 
 searchButton.addEventListener("click", () => {
-  foundVases += 1;
-  vaseCount.textContent = String(foundVases);
-  searchFeedback.textContent = `Последняя находка: стеклянная ваза № ${foundVases}.`;
+  if (searchTimer !== null) {
+    return;
+  }
+
+  searchButton.setAttribute("aria-disabled", "true");
+  searchTimer = setTimeout(() => {
+    foundVases += 1;
+    vaseCount.textContent = String(foundVases);
+    searchFeedback.textContent = `Последняя находка: стеклянная ваза № ${foundVases}.`;
+    searchTimer = null;
+    searchButton.removeAttribute("aria-disabled");
+  }, 300);
 });
 
 resetButton.addEventListener("click", () => {
+  clearTimeout(searchTimer);
+  searchTimer = null;
+  searchButton.removeAttribute("aria-disabled");
   foundVases = 0;
   vaseCount.textContent = "0";
   searchFeedback.textContent = "";
