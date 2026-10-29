@@ -9,6 +9,8 @@ const resetButton = document.getElementById("reset-expedition");
 const vaseCount = document.getElementById("vase-count");
 const searchFeedback = document.getElementById("search-feedback");
 
+const VASE_FIND_CHANCE = 0.7;
+
 let foundVases = 0;
 let searchTimer = null;
 
@@ -25,9 +27,13 @@ searchButton.addEventListener("click", () => {
 
   searchButton.setAttribute("aria-disabled", "true");
   searchTimer = setTimeout(() => {
-    foundVases += 1;
-    vaseCount.textContent = String(foundVases);
-    searchFeedback.textContent = `Последняя находка: стеклянная ваза № ${foundVases}.`;
+    if (Math.random() < VASE_FIND_CHANCE) {
+      foundVases += 1;
+      vaseCount.textContent = String(foundVases);
+      searchFeedback.textContent = `Последняя находка: стеклянная ваза № ${foundVases}.`;
+    } else {
+      searchFeedback.textContent = "Поиск завершён: вазы не найдены. Попробуйте ещё раз.";
+    }
     searchTimer = null;
     searchButton.removeAttribute("aria-disabled");
   }, 300);
