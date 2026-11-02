@@ -7,11 +7,13 @@ const startButton = document.getElementById("start-expedition");
 const searchButton = document.getElementById("search-vase");
 const resetButton = document.getElementById("reset-expedition");
 const vaseCount = document.getElementById("vase-count");
+const attemptCount = document.getElementById("attempt-count");
 const searchFeedback = document.getElementById("search-feedback");
 
 const VASE_FIND_CHANCE = 0.7;
 
 let foundVases = 0;
+let searchAttempts = 0;
 let searchTimer = null;
 
 startButton.addEventListener("click", () => {
@@ -27,6 +29,8 @@ searchButton.addEventListener("click", () => {
 
   searchButton.setAttribute("aria-disabled", "true");
   searchTimer = setTimeout(() => {
+    searchAttempts += 1;
+    attemptCount.textContent = String(searchAttempts);
     if (Math.random() < VASE_FIND_CHANCE) {
       foundVases += 1;
       vaseCount.textContent = String(foundVases);
@@ -44,6 +48,8 @@ resetButton.addEventListener("click", () => {
   searchTimer = null;
   searchButton.removeAttribute("aria-disabled");
   foundVases = 0;
+  searchAttempts = 0;
   vaseCount.textContent = "0";
+  attemptCount.textContent = "0";
   searchFeedback.textContent = "";
 });
