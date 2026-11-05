@@ -126,6 +126,36 @@ h1 {
   color: #e2b78b;
 }
 
+.expedition__progress {
+  margin: 24px 0 0;
+  color: #b9d9d1;
+}
+
+.expedition__progress:not([hidden])::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  border: 2px solid #486366;
+  border-top-color: #b9d9d1;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: search-spin 0.8s linear infinite;
+}
+
+@keyframes search-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expedition__progress:not([hidden])::before {
+    animation: none;
+  }
+}
+
 .intro__note {
   margin: 36px 0 0;
   color: #abc2bc;

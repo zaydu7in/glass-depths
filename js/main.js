@@ -9,6 +9,7 @@ const resetButton = document.getElementById("reset-expedition");
 const vaseCount = document.getElementById("vase-count");
 const attemptCount = document.getElementById("attempt-count");
 const searchFeedback = document.getElementById("search-feedback");
+const searchProgress = document.getElementById("search-progress");
 
 const VASE_FIND_CHANCE = 0.7;
 
@@ -28,6 +29,7 @@ searchButton.addEventListener("click", () => {
   }
 
   searchButton.setAttribute("aria-disabled", "true");
+  searchProgress.hidden = false;
   searchTimer = setTimeout(() => {
     searchAttempts += 1;
     attemptCount.textContent = String(searchAttempts);
@@ -40,6 +42,7 @@ searchButton.addEventListener("click", () => {
     }
     searchTimer = null;
     searchButton.removeAttribute("aria-disabled");
+    searchProgress.hidden = true;
   }, 300);
 });
 
@@ -47,6 +50,7 @@ resetButton.addEventListener("click", () => {
   clearTimeout(searchTimer);
   searchTimer = null;
   searchButton.removeAttribute("aria-disabled");
+  searchProgress.hidden = true;
   foundVases = 0;
   searchAttempts = 0;
   vaseCount.textContent = "0";
