@@ -10,7 +10,7 @@
   </head>
   <body>
     <main class="intro">
-      <p class="intro__day">День 12 из 70</p>
+      <p class="intro__day">День 13 из 70</p>
       <div id="intro-screen">
         <img class="intro__vase" src="assets/images/vase.svg" alt="" width="104" height="144">
         <p class="intro__eyebrow">Маленькая история о хрупких находках</p>
@@ -33,6 +33,10 @@
         <button class="action-button action-button--secondary" id="reset-expedition" type="button">Сбросить экспедицию</button>
         <p class="expedition__progress" id="search-progress" hidden>Идёт поиск…</p>
         <p class="expedition__feedback" id="search-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+        <section class="intro__goal" aria-labelledby="inventory-title">
+          <h2 id="inventory-title">Инвентарь ваз</h2>
+          <ul id="vase-inventory"></ul>
+        </section>
       </section>
     </main>
   </body>
