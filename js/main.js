@@ -16,6 +16,12 @@ const searchProgress = document.getElementById("search-progress");
 const VASE_FIND_CHANCE = 0.7;
 const SHARD_FIND_CHANCE = 0.15;
 
+const VASE_TYPES = [
+  "Шарообразная стеклянная ваза",
+  "Цилиндрическая стеклянная ваза",
+  "Каплевидная стеклянная ваза",
+];
+
 const foundVases = [];
 let foundShards = 0;
 let searchAttempts = 0;
@@ -39,14 +45,14 @@ searchButton.addEventListener("click", () => {
     attemptCount.textContent = String(searchAttempts);
     const searchRoll = Math.random();
     if (searchRoll < VASE_FIND_CHANCE) {
-      const vase = `Стеклянная ваза № ${foundVases.length + 1}`;
+      const vase = `${VASE_TYPES[0]} № ${foundVases.length + 1}`;
       foundVases.push(vase);
       vaseCount.textContent = String(foundVases.length);
 
       const item = document.createElement("li");
       item.textContent = vase;
       vaseInventory.append(item);
-      searchFeedback.textContent = `Последняя находка — ${vase.toLowerCase()}.`;
+      searchFeedback.textContent = `Последняя находка — ${vase}.`;
     } else if (searchRoll < VASE_FIND_CHANCE + SHARD_FIND_CHANCE) {
       const shards = 1 + Math.floor(Math.random() * 3);
       foundShards += shards;
