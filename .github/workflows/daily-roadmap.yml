@@ -1,0 +1,79 @@
+name: Daily roadmap
+on:
+  schedule:
+    - cron: '0 10 * * *'
+      timezone: Europe/Moscow
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: glass-depths-daily
+  cancel-in-progress: false
+
+jobs:
+  develop:
+    if: github.repository == 'zaydu7in/glass-depths' && github.ref == 'refs/heads/main' && github.event.repository.private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Find the next day
+        id: plan
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [[ "$EVENT_NAME" == workflow_dispatch ]]; then
+            echo 'mode=smoke' >> "$GITHUB_OUTPUT"
+          else
+            day="$(python3 .github/scripts/daily_roadmap.py next)"
+            echo "day=$day" >> "$GITHUB_OUTPUT"
+            if [[ -n "$day" ]]; then
+              echo 'mode=develop' >> "$GITHUB_OUTPUT"
+            fi
+          fi
+      - name: Start the local coding model
+        if: steps.plan.outputs.mode != ''
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -fsSL --retry 3 -o llama.tar.gz \
+            https://github.com/ggml-org/llama.cpp/releases/download/b12240/llama-b12240-bin-ubuntu-x64.tar.gz
+          echo '7157c9f5669d0ccdfcc1d03ca1726ebe7844c44647180e6573eed2131def69db  llama.tar.gz' | sha256sum -c
+          mkdir -p llama
+          tar -xzf llama.tar.gz --strip-components=1 -C llama
+          curl -fsSL --retry 3 -o model.gguf \
+            https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/13fb94bfda8c8cf22497dc57b78f391a9acb426a/qwen2.5-coder-7b-instruct-q4_k_m.gguf
+          echo '509287f78cb4d4cf6b3843734733b914b2c158e43e22a7f4bf5e963800894d3c  model.gguf' | sha256sum -c
+          llama/llama-server --model model.gguf --alias qwen-coder --ctx-size 24576 \
+            --parallel 1 --threads 4 --host 127.0.0.1 --port 8080 > llama.log 2>&1 &
+          if ! curl -fsS --retry 50 --retry-connrefused --retry-delay 2 http://127.0.0.1:8080/health; then
+            cat llama.log
+            exit 1
+          fi
+      - name: Test model without changing the project
+        if: steps.plan.outputs.mode == 'smoke'
+        run: python3 .github/scripts/daily_roadmap.py smoke
+      - name: Implement and check the next day
+        if: steps.plan.outputs.mode == 'develop'
+        run: python3 .github/scripts/daily_roadmap.py develop
+      - name: Publish the roadmap commit
+        if: steps.plan.outputs.mode == 'develop'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DAY: ${{ steps.plan.outputs.day }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "$(python3 .github/scripts/daily_roadmap.py message)"
+          gh auth setup-git --hostname github.com
+          if [[ "$DAY" == 70 ]]; then
+            git tag v1.0.0
+            git push --atomic origin HEAD:main refs/tags/v1.0.0
+          else
+            git push origin HEAD:main
+          fi
