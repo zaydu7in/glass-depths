@@ -20,7 +20,6 @@ const VASE_TYPES = [
   "Шарообразная стеклянная ваза",
   "Цилиндрическая стеклянная ваза",
   "Каплевидная стеклянная ваза",
-  "Эллиптическая стеклянная ваза",
 ];
 
 const foundVases = [];
@@ -46,7 +45,8 @@ searchButton.addEventListener("click", () => {
     attemptCount.textContent = String(searchAttempts);
     const searchRoll = Math.random();
     if (searchRoll < VASE_FIND_CHANCE) {
-      const vase = `${VASE_TYPES[0]} № ${foundVases.length + 1}`;
+      const vaseType = VASE_TYPES[Math.floor(Math.random() * VASE_TYPES.length)];
+      const vase = `${vaseType} № ${foundVases.length + 1}`;
       foundVases.push(vase);
       vaseCount.textContent = String(foundVases.length);
 
