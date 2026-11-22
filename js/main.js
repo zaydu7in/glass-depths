@@ -27,6 +27,30 @@ let foundShards = 0;
 let searchAttempts = 0;
 let searchTimer = null;
 
+function groupVases() {
+  const groupedVases = [];
+  const vasesMap = new Map();
+
+  foundVases.forEach(vase => {
+    const [type, number] = vase.split(' № ');
+    if (vasesMap.has(type)) {
+      vasesMap.get(type).push(number);
+    } else {
+      vasesMap.set(type, [number]);
+    }
+  });
+
+  vasesMap.forEach((numbers, type) => {
+    groupedVases.push(`${type} (${numbers.join(', ')})`);
+  });
+
+  vaseInventory.replaceChildren(...groupedVases.map(vase => {
+    const item = document.createElement("li");
+    item.textContent = vase;
+    return item;
+  }));
+}
+
 startButton.addEventListener("click", () => {
   introScreen.hidden = true;
   expeditionScreen.hidden = false;
@@ -50,9 +74,6 @@ searchButton.addEventListener("click", () => {
       foundVases.push(vase);
       vaseCount.textContent = String(foundVases.length);
 
-      const item = document.createElement("li");
-      item.textContent = vase;
-      vaseInventory.append(item);
       searchFeedback.textContent = `Последняя находка — ${vase}.`;
     } else if (searchRoll < VASE_FIND_CHANCE + SHARD_FIND_CHANCE) {
       const shards = 1 + Math.floor(Math.random() * 3);
@@ -65,6 +86,7 @@ searchButton.addEventListener("click", () => {
     searchTimer = null;
     searchButton.removeAttribute("aria-disabled");
     searchProgress.hidden = true;
+    groupVases();
   }, 300);
 });
 
@@ -81,4 +103,5 @@ resetButton.addEventListener("click", () => {
   shardCount.textContent = "0";
   attemptCount.textContent = "0";
   searchFeedback.textContent = "";
+  groupVases();
 });
