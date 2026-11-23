@@ -15,6 +15,7 @@ const searchProgress = document.getElementById("search-progress");
 
 const VASE_FIND_CHANCE = 0.7;
 const SHARD_FIND_CHANCE = 0.15;
+const DEFAULT_VASE_RARITY = "common";
 
 const VASE_TYPES = [
   "Шарообразная стеклянная ваза",
@@ -29,8 +30,8 @@ let searchTimer = null;
 
 function renderVaseInventory() {
   const counts = new Map();
-  for (const type of foundVases) {
-    counts.set(type, (counts.get(type) ?? 0) + 1);
+  for (const vase of foundVases) {
+    counts.set(vase.type, (counts.get(vase.type) ?? 0) + 1);
   }
 
   vaseInventory.replaceChildren();
@@ -60,7 +61,7 @@ searchButton.addEventListener("click", () => {
     const searchRoll = Math.random();
     if (searchRoll < VASE_FIND_CHANCE) {
       const vaseType = VASE_TYPES[Math.floor(Math.random() * VASE_TYPES.length)];
-      foundVases.push(vaseType);
+      foundVases.push({ type: vaseType, rarity: DEFAULT_VASE_RARITY });
       vaseCount.textContent = String(foundVases.length);
       renderVaseInventory();
       searchFeedback.textContent = `Последняя находка — ${vaseType} № ${foundVases.length}.`;
