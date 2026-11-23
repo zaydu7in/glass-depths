@@ -27,28 +27,18 @@ let foundShards = 0;
 let searchAttempts = 0;
 let searchTimer = null;
 
-function groupVases() {
-  const groupedVases = [];
-  const vasesMap = new Map();
+function renderVaseInventory() {
+  const counts = new Map();
+  for (const type of foundVases) {
+    counts.set(type, (counts.get(type) ?? 0) + 1);
+  }
 
-  foundVases.forEach(vase => {
-    const [type, number] = vase.split(' № ');
-    if (vasesMap.has(type)) {
-      vasesMap.get(type).push(number);
-    } else {
-      vasesMap.set(type, [number]);
-    }
-  });
-
-  vasesMap.forEach((numbers, type) => {
-    groupedVases.push(`${type} (${numbers.join(', ')})`);
-  });
-
-  vaseInventory.replaceChildren(...groupedVases.map(vase => {
+  vaseInventory.replaceChildren();
+  for (const [type, count] of counts) {
     const item = document.createElement("li");
-    item.textContent = vase;
-    return item;
-  }));
+    item.textContent = `${type} × ${count}`;
+    vaseInventory.append(item);
+  }
 }
 
 startButton.addEventListener("click", () => {
@@ -70,11 +60,10 @@ searchButton.addEventListener("click", () => {
     const searchRoll = Math.random();
     if (searchRoll < VASE_FIND_CHANCE) {
       const vaseType = VASE_TYPES[Math.floor(Math.random() * VASE_TYPES.length)];
-      const vase = `${vaseType} № ${foundVases.length + 1}`;
-      foundVases.push(vase);
+      foundVases.push(vaseType);
       vaseCount.textContent = String(foundVases.length);
-
-      searchFeedback.textContent = `Последняя находка — ${vase}.`;
+      renderVaseInventory();
+      searchFeedback.textContent = `Последняя находка — ${vaseType} № ${foundVases.length}.`;
     } else if (searchRoll < VASE_FIND_CHANCE + SHARD_FIND_CHANCE) {
       const shards = 1 + Math.floor(Math.random() * 3);
       foundShards += shards;
@@ -86,7 +75,6 @@ searchButton.addEventListener("click", () => {
     searchTimer = null;
     searchButton.removeAttribute("aria-disabled");
     searchProgress.hidden = true;
-    groupVases();
   }, 300);
 });
 
@@ -103,5 +91,4 @@ resetButton.addEventListener("click", () => {
   shardCount.textContent = "0";
   attemptCount.textContent = "0";
   searchFeedback.textContent = "";
-  groupVases();
 });
