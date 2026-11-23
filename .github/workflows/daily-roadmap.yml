@@ -1,9 +1,14 @@
 name: Daily roadmap
 on:
   schedule:
-    - cron: '0 10 * * *'
-      timezone: Europe/Moscow
+    - cron: '0 7 * * *' # 10:00 Moscow time
+    - cron: '17 7,10,15 * * *' # Backup attempts at 10:17, 13:17 and 18:17 Moscow time
   workflow_dispatch:
+    inputs:
+      develop:
+        description: 'Implement the next roadmap day if due'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -27,8 +32,9 @@ jobs:
         id: plan
         env:
           EVENT_NAME: ${{ github.event_name }}
+          DEVELOP_REQUESTED: ${{ inputs.develop }}
         run: |
-          if [[ "$EVENT_NAME" == workflow_dispatch ]]; then
+          if [[ "$EVENT_NAME" == workflow_dispatch && "$DEVELOP_REQUESTED" != true ]]; then
             echo 'mode=smoke' >> "$GITHUB_OUTPUT"
           else
             day="$(python3 .github/scripts/daily_roadmap.py next)"

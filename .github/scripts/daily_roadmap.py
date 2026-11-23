@@ -272,9 +272,10 @@ def main():
         return
 
     last_day, last_date = plan()
+    now = datetime.now(MOSCOW)
     if command == "message":
         print(roadmap_row(last_day + 1)[2])
-    elif last_day < 70 and last_date < datetime.now(MOSCOW).date():
+    elif last_day < 70 and last_date < now.date() and now.hour >= 10:
         if command == "next":
             print(last_day + 1)
         elif command == "develop":
