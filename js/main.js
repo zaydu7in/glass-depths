@@ -21,6 +21,12 @@ const VASE_RARITIES = [
   { id: "rare", weight: 0.05 },
 ];
 
+const VASE_RARITY_LABELS = {
+  common: "обычная",
+  uncommon: "необычная",
+  rare: "редкая",
+};
+
 const VASE_TYPES = [
   "Шарообразная стеклянная ваза",
   "Цилиндрическая стеклянная ваза",
@@ -45,15 +51,18 @@ function rollVaseRarity(randomValue = Math.random()) {
 }
 
 function renderVaseInventory() {
-  const counts = new Map();
+  const groups = new Map();
   for (const vase of foundVases) {
-    counts.set(vase.type, (counts.get(vase.type) ?? 0) + 1);
+    const key = `${vase.type}:${vase.rarity}`;
+    const group = groups.get(key) ?? { ...vase, count: 0 };
+    group.count += 1;
+    groups.set(key, group);
   }
 
   vaseInventory.replaceChildren();
-  for (const [type, count] of counts) {
+  for (const { type, rarity, count } of groups.values()) {
     const item = document.createElement("li");
-    item.textContent = `${type} × ${count}`;
+    item.textContent = `${type} — ${VASE_RARITY_LABELS[rarity]} × ${count}`;
     vaseInventory.append(item);
   }
 }
