@@ -6,6 +6,7 @@ const expeditionTitle = document.getElementById("expedition-title");
 const startButton = document.getElementById("start-expedition");
 const searchButton = document.getElementById("search-vase");
 const resetButton = document.getElementById("reset-expedition");
+const sortInventoryButton = document.getElementById("sort-inventory");
 const vaseCount = document.getElementById("vase-count");
 const vaseInventory = document.getElementById("vase-inventory");
 const shardCount = document.getElementById("shard-count");
@@ -27,6 +28,12 @@ const VASE_RARITY_LABELS = {
   rare: "редкая",
 };
 
+const RARITY_SORT_ORDER = {
+  rare: 0,
+  uncommon: 1,
+  common: 2,
+};
+
 const VASE_TYPES = [
   "Шарообразная стеклянная ваза",
   "Цилиндрическая стеклянная ваза",
@@ -37,6 +44,7 @@ const foundVases = [];
 let foundShards = 0;
 let searchAttempts = 0;
 let searchTimer = null;
+let isInventorySortedByRarity = false;
 
 function rollVaseRarity(randomValue = Math.random()) {
   let upperBound = 0;
@@ -59,13 +67,29 @@ function renderVaseInventory() {
     groups.set(key, group);
   }
 
+  const inventoryGroups = [...groups.values()];
+  if (isInventorySortedByRarity) {
+    inventoryGroups.sort(
+      (first, second) => RARITY_SORT_ORDER[first.rarity] - RARITY_SORT_ORDER[second.rarity],
+    );
+  }
+
   vaseInventory.replaceChildren();
-  for (const { type, rarity, count } of groups.values()) {
+  for (const { type, rarity, count } of inventoryGroups) {
     const item = document.createElement("li");
     item.textContent = `${type} — ${VASE_RARITY_LABELS[rarity]} × ${count}`;
     vaseInventory.append(item);
   }
 }
+
+sortInventoryButton.addEventListener("click", () => {
+  isInventorySortedByRarity = !isInventorySortedByRarity;
+  sortInventoryButton.setAttribute("aria-pressed", String(isInventorySortedByRarity));
+  sortInventoryButton.textContent = isInventorySortedByRarity
+    ? "Вернуть порядок находок"
+    : "Сортировать по редкости";
+  renderVaseInventory();
+});
 
 startButton.addEventListener("click", () => {
   introScreen.hidden = true;
