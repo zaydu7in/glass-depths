@@ -13,6 +13,10 @@ const shardCount = document.getElementById("shard-count");
 const attemptCount = document.getElementById("attempt-count");
 const searchFeedback = document.getElementById("search-feedback");
 const searchProgress = document.getElementById("search-progress");
+const vaseDetails = document.getElementById("vase-details");
+const vaseDetailsTitle = document.getElementById("vase-details-title");
+const vaseDetailsText = document.getElementById("vase-details-text");
+const closeVaseDetailsButton = document.getElementById("close-vase-details");
 
 const VASE_FIND_CHANCE = 0.7;
 const SHARD_FIND_CHANCE = 0.15;
@@ -34,6 +38,12 @@ const RARITY_SORT_ORDER = {
   common: 2,
 };
 
+const VASE_TYPE_DESCRIPTIONS = {
+  "Шарообразная стеклянная ваза": "Округлая ваза с мягкими линиями, созданная для устойчивости в глубине шахты.",
+  "Цилиндрическая стеклянная ваза": "Высокая ваза с ровными стенками, в которой свет отражается длинными полосами.",
+  "Каплевидная стеклянная ваза": "Ваза с плавно сужающимся верхом, похожая на застывшую стеклянную каплю.",
+};
+
 const VASE_TYPES = [
   "Шарообразная стеклянная ваза",
   "Цилиндрическая стеклянная ваза",
@@ -45,6 +55,7 @@ let foundShards = 0;
 let searchAttempts = 0;
 let searchTimer = null;
 let isInventorySortedByRarity = false;
+let lastSelectedVaseButton = null;
 
 function rollVaseRarity(randomValue = Math.random()) {
   let upperBound = 0;
@@ -56,6 +67,13 @@ function rollVaseRarity(randomValue = Math.random()) {
   }
 
   return VASE_RARITIES[VASE_RARITIES.length - 1].id;
+}
+
+function showVaseDetails(type, rarity, button) {
+  lastSelectedVaseButton = button;
+  vaseDetailsText.textContent = `${type} — ${VASE_RARITY_LABELS[rarity]}. ${VASE_TYPE_DESCRIPTIONS[type]}`;
+  vaseDetails.hidden = false;
+  vaseDetailsTitle.focus();
 }
 
 function renderVaseInventory() {
@@ -77,10 +95,20 @@ function renderVaseInventory() {
   vaseInventory.replaceChildren();
   for (const { type, rarity, count } of inventoryGroups) {
     const item = document.createElement("li");
-    item.textContent = `${type} — ${VASE_RARITY_LABELS[rarity]} × ${count}`;
+    const button = document.createElement("button");
+    button.className = "inventory__item";
+    button.type = "button";
+    button.textContent = `${type} — ${VASE_RARITY_LABELS[rarity]} × ${count}`;
+    button.addEventListener("click", () => showVaseDetails(type, rarity, button));
+    item.append(button);
     vaseInventory.append(item);
   }
 }
+
+closeVaseDetailsButton.addEventListener("click", () => {
+  vaseDetails.hidden = true;
+  lastSelectedVaseButton?.focus();
+});
 
 sortInventoryButton.addEventListener("click", () => {
   isInventorySortedByRarity = !isInventorySortedByRarity;
@@ -135,6 +163,8 @@ resetButton.addEventListener("click", () => {
   searchProgress.hidden = true;
   foundVases.length = 0;
   vaseInventory.replaceChildren();
+  vaseDetails.hidden = true;
+  lastSelectedVaseButton = null;
   foundShards = 0;
   searchAttempts = 0;
   vaseCount.textContent = "0";

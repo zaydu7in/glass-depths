@@ -106,9 +106,47 @@ h1 {
 }
 
 .action-button:focus-visible,
-#expedition-title:focus {
+#expedition-title:focus,
+#vase-details-title:focus {
   outline: 3px solid #edf4ed;
   outline-offset: 6px;
+}
+
+.inventory__item {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: 1px solid #486366;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.inventory__item:hover {
+  background-color: #20373b;
+}
+
+.inventory__item:focus-visible {
+  outline: 3px solid #edf4ed;
+  outline-offset: 3px;
+}
+
+.vase-details {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #486366;
+}
+
+.vase-details h3 {
+  margin: 0 0 8px;
+  color: #e2b78b;
+}
+
+.vase-details p {
+  margin: 0;
 }
 
 .expedition__count {
