@@ -112,6 +112,27 @@ h1 {
   outline-offset: 6px;
 }
 
+.inventory-filter {
+  display: block;
+  margin-top: 16px;
+  color: #c3d1cf;
+}
+
+.inventory-filter select {
+  margin-left: 6px;
+  padding: 5px;
+  border: 1px solid #486366;
+  border-radius: 4px;
+  background-color: #112126;
+  color: #edf4ed;
+  font: inherit;
+}
+
+.inventory-filter select:focus-visible {
+  outline: 3px solid #edf4ed;
+  outline-offset: 3px;
+}
+
 .inventory__item {
   width: 100%;
   margin-top: 8px;

@@ -7,6 +7,7 @@ const startButton = document.getElementById("start-expedition");
 const searchButton = document.getElementById("search-vase");
 const resetButton = document.getElementById("reset-expedition");
 const sortInventoryButton = document.getElementById("sort-inventory");
+const rarityFilter = document.getElementById("rarity-filter");
 const vaseCount = document.getElementById("vase-count");
 const vaseInventory = document.getElementById("vase-inventory");
 const shardCount = document.getElementById("shard-count");
@@ -56,6 +57,7 @@ let searchAttempts = 0;
 let searchTimer = null;
 let isInventorySortedByRarity = false;
 let lastSelectedVaseButton = null;
+let selectedRarity = "all";
 
 function rollVaseRarity(randomValue = Math.random()) {
   let upperBound = 0;
@@ -85,7 +87,10 @@ function renderVaseInventory() {
     groups.set(key, group);
   }
 
-  const inventoryGroups = [...groups.values()];
+  let inventoryGroups = [...groups.values()];
+  if (selectedRarity !== "all") {
+    inventoryGroups = inventoryGroups.filter(({ rarity }) => rarity === selectedRarity);
+  }
   if (isInventorySortedByRarity) {
     inventoryGroups.sort(
       (first, second) => RARITY_SORT_ORDER[first.rarity] - RARITY_SORT_ORDER[second.rarity],
@@ -108,6 +113,13 @@ function renderVaseInventory() {
 closeVaseDetailsButton.addEventListener("click", () => {
   vaseDetails.hidden = true;
   lastSelectedVaseButton?.focus();
+});
+
+rarityFilter.addEventListener("change", () => {
+  selectedRarity = rarityFilter.value;
+  vaseDetails.hidden = true;
+  lastSelectedVaseButton = null;
+  renderVaseInventory();
 });
 
 sortInventoryButton.addEventListener("click", () => {
